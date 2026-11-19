@@ -1,5 +1,6 @@
 package com.example.emprestimo;
 
+import com.example.emprestimo.model.Equipamento;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -7,7 +8,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 class EmprestimoApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void equipamentoNovoNasceDisponivel() {
+// 1. prepara: monta o cenário
+		Equipamento equipamento = new Equipamento();
+// 2. executa: faz a ação que está sendo testada
+		boolean disponivel = equipamento.isDisponivel();
+// 3. confere: compara com o esperado
+		assertTrue(disponivel);
 	}
 
 }
