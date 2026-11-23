@@ -71,4 +71,12 @@ public class EquipamentoService {
         }
         equipamentoRepository.delete(equipamento);
     }
+
+    public Equipamento emprestar(Long id) {
+        Equipamento equipamento = buscar(id);
+
+        equipamento.emprestar();
+
+        return equipamentoRepository.save(equipamento);
+    }
 }

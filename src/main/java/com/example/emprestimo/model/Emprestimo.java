@@ -1,5 +1,6 @@
 package com.example.emprestimo.model;
 
+import com.example.emprestimo.exception.ConflitoException;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -30,18 +31,29 @@ public class Emprestimo {
 
     public Emprestimo() { }
 
-    public Emprestimo( Equipamento equipamento , Colaborador colaborador, LocalDate hoje){
+    public Emprestimo(Equipamento equipamento, Colaborador colaborador, LocalDate hoje) {
         this.equipamento = equipamento;
         this.colaborador = colaborador;
+
+        equipamento.emprestar();
+
         this.dataEmprestimo = hoje;
         this.dataPrevistaDevolucao = hoje.plusDays(14);
-
     }
 
-    public boolean isAtrasado() {
+    public boolean isAtrasado(LocalDate dataConsulta) {
         return dataDevolucao == null
                 && dataPrevistaDevolucao
-                .isBefore(LocalDate.now());
+                .isBefore(dataConsulta);
+    }
+
+    public void devolver(LocalDate hoje) {
+        if (dataDevolucao != null) {
+            throw new ConflitoException("Este empréstimo já foi devolvido!");
+        }
+
+        this.dataDevolucao = hoje;
+        this.equipamento.devolver();
     }
 
     public Long getId() {

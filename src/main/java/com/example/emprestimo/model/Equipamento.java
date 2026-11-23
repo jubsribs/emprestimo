@@ -1,5 +1,6 @@
 package com.example.emprestimo.model;
 
+import com.example.emprestimo.exception.ConflitoException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,6 +28,22 @@ public class Equipamento {
     private boolean disponivel = true;
 
     public Equipamento() { }
+
+    public void emprestar() {
+        if (!disponivel) {
+            throw new ConflitoException("Equipamento indisponível para empréstimo!");
+        }
+
+        disponivel = false;
+    }
+
+    public void devolver() {
+        if (disponivel) {
+            throw new ConflitoException("Equipamento já está disponível!");
+        }
+
+        disponivel = true;
+    }
 
     public Long getId() {
         return id;
