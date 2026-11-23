@@ -21,7 +21,7 @@ public class EmprestimoController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Emprestimo emprestar(
-            @RequestBody @Valid EmprestimoRequest pedido) {
+            @ModelAttribute @Valid EmprestimoRequest pedido) {
         return emprestimoService.emprestar(pedido);
     }
 
