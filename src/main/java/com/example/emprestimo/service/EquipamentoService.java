@@ -26,7 +26,7 @@ public class EquipamentoService {
             Boolean disponivel) {
 
         if (tipo != null && disponivel != null) {
-            return equipamentoRepository.findByTipoandDisponivel(tipo, disponivel);
+            return equipamentoRepository.findByTipoAndDisponivel(tipo, disponivel);
         }
 
         if (tipo != null) {

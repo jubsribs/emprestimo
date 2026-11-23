@@ -12,5 +12,5 @@ public interface EquipamentoRepository extends JpaRepository<Equipamento, Long> 
 
     List<Equipamento> findByTipo(TipoEquipamento tipo);
     List<Equipamento> findByDisponivel (boolean disponivel);
-    List <Equipamento> findByTipoandDisponivel ( TipoEquipamento tipo, boolean disponivel);
+    List <Equipamento> findByTipoAndDisponivel ( TipoEquipamento tipo, boolean disponivel);
 }
