@@ -10,20 +10,21 @@ import java.util.List;
 
 @Service
 public class ColaboradorService {
-    private final ColaboradorRepository repository;
+    private final ColaboradorRepository colaboradorRepository;
     public ColaboradorService(ColaboradorRepository repository) {
-        this.repository = repository;
+        this.colaboradorRepository = repository;
     }
-    public List<Colaborador> listar() { return repository.findAll(); }
+
+    public List<Colaborador> listar() { return colaboradorRepository.findAll(); }
+
     public Colaborador buscar(Long id) {
-        return repository.findById(id)
+        return colaboradorRepository.findById(id)
                 .orElseThrow(() -> new NaoEncontradoException("Colaborador não encontrado"));
     }
     public Colaborador cadastrar(Colaborador colaborador) {
-        if (repository.existsByEmail(colaborador.getEmail())) {
+        if (colaboradorRepository.existsByEmail(colaborador.getEmail())) {
             throw new ConflitoException("E-mail já cadastrado");
         }
-// quarta-feira: aqui entra a busca do endereço no ViaCEP
-        return repository.save(colaborador);
+        return colaboradorRepository.save(colaborador);
     }
 }

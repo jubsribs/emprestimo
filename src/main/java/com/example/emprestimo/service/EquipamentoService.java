@@ -13,33 +13,45 @@ import java.util.List;
 
 @Service
 public class EquipamentoService {
-    private final EquipamentoRepository repository;
+    private final EquipamentoRepository equipamentoRepository;
     private final EmprestimoRepository emprestimoRepository;
 
-    public EquipamentoService(EquipamentoRepository repository, EmprestimoRepository emprestimoRepository) {
-        this.repository = repository;
+    public EquipamentoService(EquipamentoRepository equipamentoRepository, EmprestimoRepository emprestimoRepository) {
+        this.equipamentoRepository = equipamentoRepository;
         this.emprestimoRepository = emprestimoRepository;
     }
 
-    public List<Equipamento> listar(TipoEquipamento tipo) {
-        if (tipo == null) {
-            return repository.findAll();
+    public List<Equipamento> listar(
+            TipoEquipamento tipo,
+            Boolean disponivel) {
+
+        if (tipo != null && disponivel != null) {
+            return equipamentoRepository.findByTipoandDisponivel(tipo, disponivel);
         }
-        return repository.findByTipo(tipo);
+
+        if (tipo != null) {
+            return equipamentoRepository.findByTipo(tipo);
+        }
+
+        if (disponivel != null) {
+            return equipamentoRepository.findByDisponivel(disponivel);
+        }
+
+        return equipamentoRepository.findAll();
     }
 
     public Equipamento buscar(Long id) {
-        return repository.findById(id).orElseThrow(() ->
+        return equipamentoRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Equipamento não encontrado"));
     }
 
     public Equipamento cadastrar(Equipamento equipamento) {
-        if (repository.existsByPatrimonio(equipamento.getPatrimonio())) {
+        if (equipamentoRepository.existsByPatrimonio(equipamento.getPatrimonio())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT, "Patrimônio já cadastrado");
         }
         equipamento.setDisponivel(true);  // todo equipamento novo nasce disponível
-        return repository.save(equipamento);
+        return equipamentoRepository.save(equipamento);
     }
 
     public Equipamento atualizar(Long id,
@@ -47,7 +59,7 @@ public class EquipamentoService {
         Equipamento equipamento = buscar(id);
         equipamento.setNome(dados.getNome());
         equipamento.setTipo(dados.getTipo());
-        return repository.save(equipamento);
+        return equipamentoRepository.save(equipamento);
     }
 
     public void remover(Long id) {
@@ -57,6 +69,6 @@ public class EquipamentoService {
             throw new ConflitoException(
                     "Equipamento tem empréstimos registrados");
         }
-        repository.delete(equipamento);
+        equipamentoRepository.delete(equipamento);
     }
 }

@@ -19,21 +19,30 @@ public class Emprestimo {
     @JoinColumn(nullable = false)
     private Colaborador colaborador;
 
+
     @Column(nullable = false)
     private LocalDate dataEmprestimo;
 
     @Column(nullable = false)
     private LocalDate dataPrevistaDevolucao;
-    private LocalDate dataDevolucao; // null até voltar
 
-    // não é coluna: calculado na hora
+    private LocalDate dataDevolucao;
+
+    public Emprestimo() { }
+
+    public Emprestimo( Equipamento equipamento , Colaborador colaborador, LocalDate hoje){
+        this.equipamento = equipamento;
+        this.colaborador = colaborador;
+        this.dataEmprestimo = hoje;
+        this.dataPrevistaDevolucao = hoje.plusDays(14);
+
+    }
+
     public boolean isAtrasado() {
         return dataDevolucao == null
                 && dataPrevistaDevolucao
                 .isBefore(LocalDate.now());
     }
-
-    public Emprestimo() { }
 
     public Long getId() {
         return id;
@@ -62,7 +71,6 @@ public class Emprestimo {
     public LocalDate getDataEmprestimo() {
         return dataEmprestimo;
     }
-
     public void setDataEmprestimo(LocalDate dataEmprestimo) {
         this.dataEmprestimo = dataEmprestimo;
     }
@@ -74,7 +82,6 @@ public class Emprestimo {
     public void setDataPrevistaDevolucao(LocalDate dataPrevistaDevolucao) {
         this.dataPrevistaDevolucao = dataPrevistaDevolucao;
     }
-
     public LocalDate getDataDevolucao() {
         return dataDevolucao;
     }
@@ -82,6 +89,8 @@ public class Emprestimo {
     public void setDataDevolucao(LocalDate dataDevolucao) {
         this.dataDevolucao = dataDevolucao;
     }
+
+
 
 
 }
